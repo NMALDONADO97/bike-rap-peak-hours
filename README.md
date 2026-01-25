@@ -12,6 +12,19 @@ This repo is a small **Reproducible Analytical Pipeline (RAP)** that:
 - **Dependencies**: Locked in `requirements.lock` for exact environments.
 - **Makefile**: Provides a standard interface for reproducibility on Unix systems.
 
+## Requirements
+- Need to have Python installed
+- (Optional) make library installed
+- Clone the repository
+
+## First steps
+1. Clone the repository into the preferred folder using
+´´´bash
+git clone https://github.com/coldstrel/test_3_nat.git
+´´´
+2. Move inside the repository folder [bike-rap-peak-hours]
+3. If you have installed `make` refer to the `Quick Start (Unix/macOS/WSL)` section, if you don't, refer to the `One-command run (All Platforms)` section 
+
 ## Quick Start (Unix/macOS/WSL)
 If you have `make` installed:
 ```bash
@@ -20,7 +33,7 @@ make
 This will install dependencies, run the pipeline for both 'hour' and 'day' levels, and launch the dashboard.
 
 ## One-command run (All Platforms)
-If you don't have `make` or are on Windows:
+If you don't have `make` or are on Windows (choose the command depending on the python you have installed):
 ```bash
 python run.py
 python3 run.py
