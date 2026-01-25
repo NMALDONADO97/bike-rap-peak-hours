@@ -20,7 +20,7 @@ This repo is a small **Reproducible Analytical Pipeline (RAP)** that:
 ## First steps
 1. Clone the repository into the preferred folder using
 ```bash
-git clone https://github.com/coldstrel/test_3_nat.git
+git clone https://github.com/NMALDONADO97/bike-rap-peak-hours.git
 ```
 2. Move inside the repository folder [bike-rap-peak-hours]
 3. If you have installed `make` refer to the `Quick Start (Unix/macOS/WSL)` section, if you don't, refer to the `One-command run (All Platforms)` section 
