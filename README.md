@@ -88,14 +88,6 @@ or
 python3 run.py
 ```
 
-### 2) Launch the dashboard 
-
-```bash
-streamlit run app.py
-```
-
----
-
 ## Outputs (generated)
 
 Generated files in `outputs/` are prefixed by level (e.g., `hour_` or `day_`):
