@@ -17,3 +17,16 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git/
+.gitignore
+outputs/
+reports/
+data/
+.DS_Store
+*.log

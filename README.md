@@ -1,61 +1,109 @@
-# Bike-sharing demand RAP (Python) — Hour-level (Peak Hours)
+# Bike-sharing Demand RAP — Peak Hours Analysis
 
-This repo is a small **Reproducible Analytical Pipeline (RAP)** that:
-1) downloads the **UCI Bike Sharing Dataset** (`hour.csv` by default),
-2) cleans/prepares the data,
-3) analyzes **peak hours** (workingday vs weekend),
-4) trains a fast baseline model,
-5) writes **outputs** (tables + figures + a short report).
+A **Reproducible Analytical Pipeline (RAP)** that analyzes bike-sharing demand with a focus on **peak hours** (**workdays vs weekends**) using the **UCI Bike Sharing Dataset** (`hour.csv`).
+
+## Start Here
+
+### Option A — Run with Docker 
+Go to: **[Quick Start (Docker)](#quick-start-docker)**
+
+### Option B — No Docker available (run locally with Python)
+Go to: **[Quick Start (Local Python — no Docker)](#quick-start-local-python--no-docker)**
+
+---
+
+## What this pipeline does
+
+1. **Data Acquisition**: downloads the dataset (`hour.csv`)
+2. **Data Processing**: cleans and prepares hourly records
+3. **Peak Hours Analysis**: compares workdays vs weekends
+4. **Baseline Modeling**: trains a fast baseline model
+5. **Output Generation**: exports tables, figures, and a short report
+6. **Interactive Dashboard**: launches a Streamlit app for exploration
+
+---
 
 ## Reproducibility
-- **Python Version**: Specified in `.python-version` (pinned to 3.12.7). Supports Python 3.10 to 3.13.
-- **Dependencies**: Locked in `requirements.lock` for exact environments.
-- **Makefile**: Provides a standard interface for reproducibility on Unix systems.
 
-## Requirements
-- Need to have Python installed
-- (Optional) make library installed
-- Clone the repository
+- **Python Version**: specified in `.python-version` (pinned to **3.12.7**). Supports Python **3.10–3.13**.
+- **Dependencies**: pinned in `requirements.txt`
+- **Containerization**: Docker ensures consistent execution across platforms
 
-## First steps
-1. Clone the repository into the preferred folder using
+---
+
+## Quick Start (Docker)
+
+### 1) Build the image
+
+From the project root directory:
+
 ```bash
-git clone https://github.com/NMALDONADO97/bike-rap-peak-hours.git
+docker build -t bike-rap:latest .
 ```
-2. Move inside the repository folder [bike-rap-peak-hours]
-3. If you have installed `make` refer to the `Quick Start (Unix/macOS/WSL)` section, if you don't, refer to the `One-command run (All Platforms)` section 
 
-## Quick Start (Unix/macOS/WSL)
-If you have `make` installed:
+### 2) Run the pipeline + dashboard
+
+Choose the command that matches your shell:
+
+**Git Bash (Windows):**
 ```bash
-make
+docker run --rm -p 8501:8501 --mount type=bind,source="$(pwd)",target=/app bike-rap:latest
 ```
-This will install dependencies, run the pipeline for both 'hour' and 'day' levels, and launch the dashboard.
 
-## One-command run (All Platforms)
-If you don't have `make` or are on Windows (choose the command depending on the python you have installed):
+**PowerShell, CMD, WSL, Linux, macOS:**
+```bash
+docker run --rm -p 8501:8501 -v .:/app bike-rap:latest
+```
+
+This will:
+- run the complete analytical pipeline
+- generate `outputs/`, `reports/`, and `processed_data/`
+- launch Streamlit on port **8501**
+
+### 3) Open the dashboard
+
+```text
+http://localhost:8501
+```
+
+To stop the dashboard: press `Ctrl+C`.
+
+---
+
+## Quick Start (Local Python — no Docker)
+
+### 1) Run the pipeline
+
+Depending on your system:
+
+
 ```bash
 python run.py
+```
+or
+
+```bash
 python3 run.py
 ```
-This script automatically:
-1. Detects and uses a compatible Python version (avoids 3.14 alpha).
-2. Creates a local virtual environment (`.venv` or `.venv-win`).
-3. Installs dependencies from `requirements.lock`.
-4. Runs the analysis pipeline for both data levels.
-5. Launches the **Streamlit dashboard** to visualize the results.
+
+### 2) Launch the dashboard 
+
+```bash
+streamlit run app.py
+```
+
+---
 
 ## Outputs (generated)
+
 Generated files in `outputs/` are prefixed by level (e.g., `hour_` or `day_`):
+
 - `*_metrics.txt` (RMSE / R²)
-- `*_summary.csv` (simple group summary)
+- `*_summary.csv` (group summary)
 - `*_peak_hours.csv` (top peak hours: workingday vs weekend)
 - `*_fig_timeseries.png` (rentals over time)
 - `*_fig_temp_vs_cnt.png` (temperature vs demand)
 - `*_fig_avg_by_hour.png` (average rentals by hour)
 - `reports/*_REPORT.md` (short human-readable report)
-- **Streamlit Dashboard**: A browser-based interactive view of all above.
+- **Streamlit Dashboard**: interactive view of all outputs
 
-## Notes
-- Downloaded data is stored in `data/raw/` (not committed).
-- To stop the dashboard, press `Ctrl+C` in your terminal.

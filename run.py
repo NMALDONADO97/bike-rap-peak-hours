@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import platform
 import shutil
 import subprocess
 import sys
@@ -11,9 +12,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 VENV_DIR = ROOT / (".venv-win" if os.name == "nt" else ".venv")
 
-
 def venv_python() -> Path:
-    if os.name == "nt":
+    """Return the venv python executable path for the current OS."""
+    if platform.system() == "Windows":
         return VENV_DIR / "Scripts" / "python.exe"
     return VENV_DIR / "bin" / "python"
 
@@ -42,24 +43,32 @@ def _remove_venv(path: Path) -> None:
 
 
 def ensure_venv() -> None:
-    if VENV_DIR.exists():
-        vpython = str(venv_python())
-        if not os.path.exists(vpython) or _get_python_version(vpython) != _get_python_version(sys.executable):
-            print(f"--- Re-creating virtualenv for Python {_get_python_version(sys.executable)} ---")
-            _remove_venv(VENV_DIR)
-
+    """Create venv if missing."""
     if not VENV_DIR.exists():
-        subprocess.check_call([sys.executable, "-m", "venv", str(VENV_DIR)], cwd=ROOT)
+        print(f"--- Creating virtualenv at {VENV_DIR} ---")
+        subprocess.check_call([sys.executable, "-m", "venv", str(VENV_DIR)], cwd=str(ROOT))
+
+    py = venv_python()
+    if not py.exists():
+        raise SystemExit(
+            f"Venv python not found at:\n  {py}\n\n"
+            "This usually happens when the venv creation failed or you are using a Python distribution "
+            "(e.g., MSYS2) that behaves differently.\n"
+            "Try running with a standard Windows Python from python.org, or delete the venv and re-run."
+        )
 
 
 def install_requirements() -> None:
-    # Prefer requirements.lock if it exists
-    req_file = "requirements.lock" if (ROOT / "requirements.lock").exists() else "requirements.txt"
-    print(f"--- Installing dependencies from {req_file} ---")
-    subprocess.check_call(
-        [str(venv_python()), "-m", "pip", "install", "-r", req_file],
-        cwd=ROOT,
-    )
+    ensure_venv()
+    py = venv_python()
+
+    req = ROOT / "requirements.txt"  # keep it simple; avoid .lock on Windows unless per-version
+    if not req.exists():
+        raise SystemExit(f"Missing requirements.txt at {req}")
+
+    print(f"--- Installing dependencies from {req.name} ---")
+    subprocess.check_call([str(py), "-m", "pip", "install", "--upgrade", "pip", "setuptools", "wheel"], cwd=str(ROOT))
+    subprocess.check_call([str(py), "-m", "pip", "install", "-r", str(req)], cwd=str(ROOT))
 
 
 def run_pipeline() -> None:
@@ -127,4 +136,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    if sys.version_info < (3, 10):
+        raise SystemExit("This project requires Python 3.10+. Please install Python 3.10 or newer.")
     main()
