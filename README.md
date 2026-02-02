@@ -25,17 +25,17 @@ Go to: **[Quick Start (Local Python — no Docker)](#quick-start-local-python--n
 
 ## Reproducibility
 
-- **Python Version**: specified in `.python-version` (pinned to **3.12.7**). Supports Python **3.10–3.13**.
+- **Python Version**: specified in `.python-version` (pinned to **3.12.7**). Supports Python **3.10–3.14**.
 - **Dependencies**: pinned in `requirements.txt`
 - **Containerization**: Docker ensures consistent execution across platforms
 
 ---
 
-## Quick Start (Docker)
+## Quick Start (Docker): 
+
+From the project root directory
 
 ### 1) Build the image
-
-From the project root directory:
 
 ```bash
 docker build -t bike-rap:latest .
@@ -71,6 +71,8 @@ To stop the dashboard: press `Ctrl+C`.
 ---
 
 ## Quick Start (Local Python — no Docker)
+
+From the project root directory
 
 ### 1) Run the pipeline
 
